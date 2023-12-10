@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Form, InputGroup, Spinner } from "react-bootstrap";
 import { Envelope, EyeFill, EyeSlashFill, Key } from "react-bootstrap-icons";
-
+import Swal from "sweetalert2";
+import axios from "axios";
+import { url } from "../../backend";
+import { AuthContext } from "../../context/AuthContext";
 
 export const Login = ({ setRegistro }) => {
+  const { iniciarSesion } = useContext(AuthContext);
   const estadoInicial = {
     correo: "",
     pass: "",
@@ -11,6 +15,7 @@ export const Login = ({ setRegistro }) => {
   const [datos, setDatos] = useState(estadoInicial);
   const [passVisible, setPassVisible] = useState(false);
   const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
@@ -20,10 +25,45 @@ export const Login = ({ setRegistro }) => {
     e.preventDefault();
     setCargando(true);
 
+    if (datos.correo.trim() == "" || datos.pass.trim() == "") {
+      Swal.fire({
+        title: "Error",
+        text: "El correo y la contraseña no deben estar vacios",
+        icon: "error",
+        confirmButtonColor: "#0d6efd",
+      });
+      setError(true);
+      setCargando(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("correo", datos.correo);
     formData.append("password", datos.pass);
 
+    axios
+      .post(`${url}api/auth/login`, formData, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((res) => {
+        const token = res.data.token;
+        iniciarSesion(token, "inicio");
+        setError(false);
+        setDatos(estadoInicial)
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Error!",
+          icon: "error",
+          text: err.response.data.msg,
+          confirmButtonText: "Continuar",
+          confirmButtonColor: "#0d6efd",
+        });
+        setError(true);
+      })
+      .finally(() => {
+        setCargando(false);
+      });
   };
   return (
     <div className="text-center">
@@ -40,6 +80,7 @@ export const Login = ({ setRegistro }) => {
             name="correo"
             onChange={handleChange}
             disabled={cargando}
+            isInvalid={error}
           />
         </InputGroup>
         <InputGroup className="mb-3">
@@ -52,6 +93,7 @@ export const Login = ({ setRegistro }) => {
             name="pass"
             onChange={handleChange}
             disabled={cargando}
+            isInvalid={error}
           />
           <InputGroup.Text onClick={() => setPassVisible(!passVisible)}>
             {passVisible ? <EyeSlashFill /> : <EyeFill />}
@@ -83,5 +125,5 @@ export const Login = ({ setRegistro }) => {
         </a>
       </p>
     </div>
-  )
-}
+  );
+};

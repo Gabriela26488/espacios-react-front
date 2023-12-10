@@ -7,6 +7,9 @@ import {
   Key,
   PersonFill,
 } from "react-bootstrap-icons";
+import axios from "axios";
+import Swal from "sweetalert2";
+import { url } from "../../backend";
 
 export const Registro = ({ setRegistro }) => {
   const estadoInicial = {
@@ -18,6 +21,7 @@ export const Registro = ({ setRegistro }) => {
   const [datos, setDatos] = useState(estadoInicial);
   const [passVisible, setPassVisible] = useState(true);
   const [cargando, setCargando] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     setDatos({ ...datos, [e.target.name]: e.target.value });
@@ -27,12 +31,64 @@ export const Registro = ({ setRegistro }) => {
     e.preventDefault();
     setCargando(true);
 
+    if (
+      datos.nombres.trim() == "" ||
+      datos.correo.trim() == "" ||
+      datos.pass.trim() == ""
+    ) {
+      Swal.fire({
+        title: "Error",
+        text: "Los campos no deben estar vacios",
+        icon: "error",
+        confirmButtonColor: "#0d6efd",
+      });
+      setError(true);
+      setCargando(false);
+      return;
+    }
+
     const formData = new FormData();
     formData.append("nombres", datos.nombres);
     formData.append("correo", datos.correo);
     formData.append("password", datos.pass);
 
+    axios
+      .post(`${url}api/auth/singin`, formData, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((res) => {
+        Swal.fire({
+          title: "Exito!",
+          icon: "success",
+          text: "Exito al crear la cuenta, por favor inicie sesión.",
+          confirmButtonText: "Continuar",
+          confirmButtonColor: "#0d6efd",
+        });
+        setError(false);
+        setDatos(estadoInicial);
+        setRegistro(false);
+      })
+      .catch((err) => {
+        console.log(err.response.data.errors);
+        const errors = err.response.data.errors;
 
+        let htmlErrors = "";
+        errors.map((i) => {
+          htmlErrors += `<p>${i.msg}</p>`;
+        });
+
+        Swal.fire({
+          title: "Error!",
+          icon: "error",
+          html: htmlErrors,
+          confirmButtonText: "Continuar",
+          confirmButtonColor: "#0d6efd",
+        });
+        setError(true)
+      })
+      .finally(() => {
+        setCargando(false);
+      });
   };
   return (
     <div className="text-center">
@@ -48,6 +104,7 @@ export const Registro = ({ setRegistro }) => {
             type="text"
             name="nombres"
             onChange={handleChange}
+            isInvalid={error}
           />
         </InputGroup>
         <InputGroup className="mb-3">
@@ -59,6 +116,7 @@ export const Registro = ({ setRegistro }) => {
             type="email"
             name="correo"
             onChange={handleChange}
+            isInvalid={error}
           />
         </InputGroup>
         <InputGroup className="mb-3">
@@ -70,6 +128,7 @@ export const Registro = ({ setRegistro }) => {
             type={!passVisible ? "text" : "password"}
             name="pass"
             onChange={handleChange}
+            isInvalid={error}
           />
           <InputGroup.Text onClick={() => setPassVisible(!passVisible)}>
             {passVisible ? <EyeFill /> : <EyeSlashFill />}
