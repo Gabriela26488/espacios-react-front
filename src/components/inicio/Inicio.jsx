@@ -1,4 +1,4 @@
-import { Container, Row, Col, Card } from "react-bootstrap";
+import { Container, Row} from "react-bootstrap";
 import { Espacio } from "./Espacio";
 import { NavBar } from "../utils/NavBar";
 

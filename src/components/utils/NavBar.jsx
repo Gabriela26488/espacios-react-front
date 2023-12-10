@@ -25,7 +25,7 @@ export const NavBar = () => {
               <Link to={"/reservaciones"} className="nav-link px-3">
                 Inicio
               </Link>
-              <Link to={"/"} className="nav-link px-3">
+              <Link to={"/reservar"} className="nav-link px-3">
                 Reservar
               </Link>
               <Link to={"/"} className="nav-link px-3">
