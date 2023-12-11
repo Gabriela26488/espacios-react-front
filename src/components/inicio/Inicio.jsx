@@ -47,7 +47,6 @@ export const Inicio = () => {
   }, []);
   return (
     <>
-      <NavBar />
       <Container className="mt-3">
         {!cargando ? (
           <>

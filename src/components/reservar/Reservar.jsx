@@ -70,8 +70,7 @@ export const Reservar = () => {
     }
 
     setErr(false);
-    const formData = new FormData();
-
+    
     await axios
       .get(`${url}api/espacios`, {
         headers: {

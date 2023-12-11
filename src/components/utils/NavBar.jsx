@@ -20,7 +20,9 @@ export const NavBar = () => {
                 Inicio
               </Link>
               {usuario.rol == "admin" ? (
-                ""
+                <Link to={"/espacios"} className="nav-link px-3">
+                Espacios
+              </Link>
               ) : (
                 <Link to={"/reservar"} className="nav-link px-3">
                   Reservar

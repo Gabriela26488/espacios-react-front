@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Auth } from "../auth/Auth";
-import { Inicio } from "../inicio/Inicio";
 import { Reservar } from "../reservar/Reservar";
 import { AuthContext } from "../../context/AuthContext";
 import { url } from "../../backend";
 import axios from "axios";
+import { Espacios } from "../espacios/Espacios";
+import { Layout } from "../inicio/Layout";
 
 export const Rutas = () => {
   const location = useLocation();
@@ -50,8 +51,9 @@ export const Rutas = () => {
       {auth ? (
         <Routes>
           <Route path="/" element={<Auth />} />
-          <Route path="/inicio" element={<Inicio />} />
+          <Route path="/inicio" element={<Layout />} />
           <Route path="/reservar" element={<Reservar />} />
+          <Route path="/espacios" element={<Espacios />} />
           <Route
             path="/*"
             element={
