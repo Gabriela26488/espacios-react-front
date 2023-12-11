@@ -1,3 +1,4 @@
+import moment from "moment";
 import { Card, Col } from "react-bootstrap";
 
 export const Espacio = ({ espacio }) => {
@@ -11,12 +12,8 @@ export const Espacio = ({ espacio }) => {
         </Card.Header>
         <Card.Body>
           <p>
-            <strong className="text-primary">Descripción: </strong>
-            {espacio.descripcion}
-          </p>
-          <p>
-            <strong className="text-primary">Ubicación: </strong>
-            {espacio.ubicacion}
+            <strong className="text-primary">Dirección: </strong>
+            {espacio.direccion}
           </p>
           <p>
             <strong className="text-primary">Capacidad: </strong>
@@ -24,8 +21,14 @@ export const Espacio = ({ espacio }) => {
           </p>
           <p>
             <strong className="text-primary">Precio: </strong>
-            {espacio.precio}
+            {espacio.precio}$
           </p>
+
+          <p>
+            <strong className="text-primary">Fecha: </strong>
+            {`${moment(espacio.disponibilidad.fecha).format("DD-MM-YYYY")} ${moment(espacio.disponibilidad.hora, "HH:mm").format("hh:mm A")}`}
+          </p>
+
         </Card.Body>
       </Card>
     </Col>

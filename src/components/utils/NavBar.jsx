@@ -1,22 +1,16 @@
+import { useContext } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
 
 export const NavBar = () => {
+  const { usuario, cerrarSesion } = useContext(AuthContext);
   return (
     <>
-      <Navbar
-        collapseOnSelect
-        expand="lg"
-        bg="primary"
-        data-bs-theme="dark"
-      >
+      <Navbar collapseOnSelect expand="lg" bg="primary" data-bs-theme="dark">
         <Container>
           <Navbar.Brand href="/" className="mt-1">
-            <h1
-              className="d-inline-block ms-2"
-            >
-              Espacios
-            </h1>
+            <h1 className="d-inline-block ms-2">Espacios</h1>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -25,15 +19,20 @@ export const NavBar = () => {
               <Link to={"/inicio"} className="nav-link px-3">
                 Inicio
               </Link>
-              <Link to={"/reservar"} className="nav-link px-3">
-                Reservar
-              </Link>
-              <Link to={"/"} className="nav-link px-3">
-                Perfil
-              </Link>
-              <Link to={"/"} className="nav-link px-3">
+              {usuario.rol == "admin" ? (
+                ""
+              ) : (
+                <Link to={"/reservar"} className="nav-link px-3">
+                  Reservar
+                </Link>
+              )}
+              <a
+                href="#"
+                className="nav-link px-3"
+                onClick={() => cerrarSesion()}
+              >
                 Salir
-              </Link>
+              </a>
             </Nav>
           </Navbar.Collapse>
         </Container>

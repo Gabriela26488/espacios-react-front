@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   const cerrarSesion = async () => {
     localStorage.removeItem("usuario");
     dispath({ type: "CERRAR_SESION" });
-    navigate("cuenta");
+    navigate("/");
   };
 
   return (
