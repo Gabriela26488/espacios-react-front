@@ -7,12 +7,20 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import { Button, Modal } from "react-bootstrap";
+import L from "leaflet";
+
+import marcadorPersonalizado from "../../assets/marcador.png";
 
 export const ModalUbicacion = ({ show, onHide, setUbicacion }) => {
   const position = [9.31778, -70.60361];
   const [posicionUsuario, setPosicionUsuario] = useState(null);
   const layer = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
-
+  const iconoPersonalizado = new L.Icon({
+    iconUrl: marcadorPersonalizado,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41], 
+    popupAnchor: [1, -34],
+  });
   const continuar = () => {
     if (posicionUsuario === null) {
       onHide();
@@ -34,6 +42,7 @@ export const ModalUbicacion = ({ show, onHide, setUbicacion }) => {
       <Marker
         position={posicionUsuario}
         Key={`${posicionUsuario.lat}${posicionUsuario.lng}`}
+        icon={iconoPersonalizado}
       />
     );
   };
@@ -47,7 +56,6 @@ export const ModalUbicacion = ({ show, onHide, setUbicacion }) => {
         <MapContainer
           center={position}
           zoom={13}
-          scrollWheelZoom={false}
           style={{ height: "50vh", width: "100%" }}
         >
           <TileLayer url={layer} />

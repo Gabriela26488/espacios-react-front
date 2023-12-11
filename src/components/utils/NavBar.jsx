@@ -22,7 +22,7 @@ export const NavBar = () => {
           <Navbar.Collapse id="responsive-navbar-nav">
             <div className="me-auto"></div>
             <Nav>
-              <Link to={"/reservaciones"} className="nav-link px-3">
+              <Link to={"/inicio"} className="nav-link px-3">
                 Inicio
               </Link>
               <Link to={"/reservar"} className="nav-link px-3">

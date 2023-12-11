@@ -11,9 +11,9 @@ export const FormBuscar = ({
   setHora,
   handleSubmit,
   err,
-  setErr
+  setErr,
+  cargando
 }) => {
-  const [cargando, setCargando] = useState(false);
   const [showUbicacion, setShowUbicacion] = useState(false);
 
   const handleReset = (e) => {
@@ -39,6 +39,7 @@ export const FormBuscar = ({
             readOnly
             onClick={() => setShowUbicacion(true)}
             isInvalid={err}
+            disabled={cargando}
           />
         </Form.Group>
 
@@ -57,6 +58,7 @@ export const FormBuscar = ({
                 )}
                 onChange={(e) => setFecha(e.target.value)}
                 isInvalid={err}
+                disabled={cargando}
               />
             </Form.Group>
           </Col>
@@ -71,16 +73,17 @@ export const FormBuscar = ({
                 name="hora"
                 onChange={(e) => setHora(e.target.value)}
                 isInvalid={err}
+                disabled={cargando}
               />
             </Form.Group>
           </Col>
         </Row>
       </Card.Body>
       <Card.Footer className="text-end">
-        <Button variant="danger me-3" onClick={handleReset} type="reset">
+        <Button variant="danger me-3" onClick={handleReset} type="reset" disabled={cargando}>
           Borrar
         </Button>
-        <Button variant="primary" type="submit">
+        <Button variant="primary" type="submit" disabled={cargando}>
           Aceptar
         </Button>
       </Card.Footer>
